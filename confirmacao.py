@@ -1,7 +1,10 @@
 import pygame
 from consts import *
 
-def confirmacao(personagem) -> pers:
+# Supondo que a classe Personagem (pers) esteja acessível
+# from personagem import Personagem as pers
+
+def confirmacao(personagem) -> pers: # Adicionei um tipo de retorno para clareza
     
     fonte = pygame.font.SysFont(None, 28)
     fonte_titulo = pygame.font.SysFont(None, 48)
@@ -28,6 +31,7 @@ def confirmacao(personagem) -> pers:
         texto_rect = texto_linha.get_rect(center=(2*LARGURA//3, ALTURA//2 - len(linhas_descricao)*15 + i*30))
         textos_descricao.append((texto_linha, texto_rect))
     
+    fundo_rect = None # Inicializa a variável
     if textos_descricao:
         largura_max = max([texto[1].width for texto in textos_descricao])
         altura_total = len(linhas_descricao) * 30
@@ -36,6 +40,32 @@ def confirmacao(personagem) -> pers:
         fundo_descricao.fill((0, 0, 0))
         fundo_rect = fundo_descricao.get_rect(center=(2*LARGURA//3, ALTURA//2))
     
+    # --- NOVO CÓDIGO PARA OS STATUS ---
+    cor_stats = (255, 255, 150) # Um amarelo claro para destacar
+    stats_info = [
+        f"Vida: {personagem.vida}",
+        f"Ataque: {personagem.ataque}",
+        f"Defesa: {personagem.defesa}",
+        f"Sorte: {personagem.sorte}"
+    ]
+    
+    stats_renderizados = []
+    line_height = 30 # Espaçamento entre as linhas de status
+    
+    # Posição inicial Y para os status
+    # Se houver uma descrição, posiciona acima dela. Senão, centraliza na tela.
+    if fundo_rect:
+        y_inicial_stats = fundo_rect.top - (len(stats_info) * line_height) - 15 # 15 pixels de espaço
+    else:
+        y_inicial_stats = ALTURA//2 - (len(stats_info) * line_height)//2
+
+    for i, stat in enumerate(stats_info):
+        texto_stat = fonte.render(stat, True, cor_stats)
+        # Centraliza horizontalmente na mesma área da descrição
+        stat_rect = texto_stat.get_rect(center=(2*LARGURA//3, y_inicial_stats + i * line_height))
+        stats_renderizados.append((texto_stat, stat_rect))
+    # --- FIM DO NOVO CÓDIGO ---
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -54,7 +84,11 @@ def confirmacao(personagem) -> pers:
         
         JANELA.blit(personagem.image, personagem_rect)
         
-        if textos_descricao:
+        # --- DESENHA OS STATUS NA TELA ---
+        for texto, rect in stats_renderizados:
+            JANELA.blit(texto, rect)
+        
+        if textos_descricao and fundo_rect: # Adicionada verificação no fundo_rect
             JANELA.blit(fundo_descricao, fundo_rect)
             for texto, rect in textos_descricao:
                 JANELA.blit(texto, rect)

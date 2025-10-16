@@ -1,9 +1,20 @@
 import pygame
 from botao import Botao as bt
 from personagem import Personagem as pers
+pygame.font.init()
+
 
 CLOCK = pygame.time.Clock()
 FPS = 60
+
+FONTE_VIDA = pygame.font.SysFont('arial', 20, True)
+FONTE_TURNO = pygame.font.SysFont('arial', 32, True, True)
+VERMELHO = (255, 0, 0)
+VERDE = (0, 255, 0)
+BRANCO = (255, 255, 255)
+LARGURA_BARRA_VIDA = 100
+ALTURA_BARRA_VIDA = 15
+DELAY_INIMIGO_MS = 1000 
 
 SOUND_MENU_PATH = "workshop-pygame/sessao1/sounds/Title Screen - Pokémon FireRed & Pokémon LeafGreen (OST).mp3"
 SOUND_CHARACTERS = "workshop-pygame/sessao1/sounds/select_characters.wav"
@@ -27,6 +38,9 @@ IMG_MENU = pygame.transform.scale(IMG_MENU, (LARGURA, ALTURA))
 
 IMG_VITORIA = pygame.image.load("workshop-pygame/sessao1/imagem/fundo/vitoria.png").convert_alpha()
 IMG_VITORIA = pygame.transform.scale(IMG_VITORIA, (LARGURA, ALTURA))
+
+IMG_DERROTA = pygame.image.load("workshop-pygame/sessao1/imagem/fundo/derrota.png").convert_alpha()
+IMG_DERROTA = pygame.transform.scale(IMG_DERROTA, (LARGURA, ALTURA))
 
 IMG_FUNDO = pygame.image.load("workshop-pygame/sessao1/imagem/fundo/fundo.jpeg").convert_alpha()
 IMG_FUNDO = pygame.transform.scale(IMG_FUNDO, (LARGURA, ALTURA))

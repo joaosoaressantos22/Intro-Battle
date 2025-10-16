@@ -4,6 +4,24 @@ from confirmacao import confirmacao
 from consts import *
 from utils import *
 
+def desenhar_status(janela, personagem, pos_quadro, fonte):
+    
+    cor_texto = (255, 255, 255) # Branco
+    x_inicial = pos_quadro[0] + 15
+    y_inicial = pos_quadro[1] + 125 # Posição Y inicial, abaixo da imagem
+    
+    status = [
+        f"Vida: {personagem.vida}",
+        f"Ataque: {personagem.ataque}",
+        f"Defesa: {personagem.defesa}",
+        f"Sorte: {personagem.sorte}"
+    ]
+    
+    espacamento = 18 # Espaço entre as linhas de texto
+    
+    for i, texto in enumerate(status):
+        texto_surface = fonte.render(texto, True, cor_texto)
+        janela.blit(texto_surface, (x_inicial, y_inicial + (i * espacamento)))
 
 def criar_quadro_vazio():
     superficie = pygame.Surface((180, 200), pygame.SRCALPHA)
@@ -30,6 +48,7 @@ def selecao():
     fonte_selecionados = pygame.font.SysFont(None, 36)
     fonte_instrucoes = pygame.font.SysFont(None, 24)
     fonte_numero = pygame.font.SysFont(None, 72)
+    fonte_status = pygame.font.SysFont(None, 22) # <<< FONTE NOVA
     
     texto_selecionados = fonte_selecionados.render("Selecionados", True, (255, 255, 255))
     
@@ -80,11 +99,14 @@ def selecao():
             if i < len(selecionados):
                 # Desenha o quadro com o personagem selecionado
                 JANELA.blit(IMG_QUADRO, pos)
-                # Centraliza a imagem do personagem no quadro
-                selecionados[i].draw_at_position(JANELA, pos[0] + 90, pos[1] + 100)
+                # Centraliza a imagem do personagem no quadro (posição Y ajustada)
+                selecionados[i].draw_at_position(JANELA, pos[0] + 90, pos[1] + 65)
                 # Número do slot (no canto superior esquerdo do quadro)
                 texto_numero = fonte_numero.render(str(i+1), True, (255, 255, 0))
                 JANELA.blit(texto_numero, (pos[0] + 10, pos[1] + 10))
+                
+                # <<< MOSTRA OS STATUS DO PERSONAGEM >>>
+                desenhar_status(JANELA, selecionados[i], pos, fonte_status)
                 
             else:
 
